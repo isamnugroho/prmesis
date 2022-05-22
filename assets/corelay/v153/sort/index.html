@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - JQuery UI Sortable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
+<link rel='stylesheet' href='https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="view clearfix">
+<div id="queue" class="column stage">
+  <div class="heading">Queue</div>
+    <div class="sort">
+    <div id="C-9-200" class="portlet">
+      <div class="portlet-header">C-9-200</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">8</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="C-X-200" class="portlet">
+      <div class="portlet-header">C-X-200</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">45</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="M18-9-50" class="portlet">
+      <div class="portlet-header">M18-9-50</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">18</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="G99-147" class="portlet">
+      <div class="portlet-header">G99-147</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">28</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="HG-99-7" class="portlet">
+      <div class="portlet-header">HG-99-7</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">80</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="GH-100-M" class="portlet">
+      <div class="portlet-header">GH-100-M</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">10</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="EG-955-87" class="portlet">
+      <div class="portlet-header">EG-955-87</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">10</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="machine1" class="column machine">
+  <div class="heading">Machine 1</div>
+  <div class="sort">
+    <div id="C-99-201" class="portlet">
+      <div class="portlet-header">C-99-201</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">20</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="machine2" class="column machine">
+  <div class="heading">Machine 2</div>
+  <div class="sort">
+    <div id="EG-5995" class="portlet">
+      <div class="portlet-header">EG-5995</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">22</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> 
+    <div id="DR-G308" class="portlet">
+      <div class="portlet-header">DR-G308</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">35</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="machine3" class="column machine">
+  <div class="heading">Machine 3</div>
+  <div class="sort">
+    <div id="EG-8877" class="portlet">
+      <div class="portlet-header">EG-8877</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">15</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> 
+    <div id="LM-9907" class="portlet">
+      <div class="portlet-header">LM-9907</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">32</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="machine4" class="column machine">
+  <div class="heading">Machine 4</div>
+  <div class="sort">
+    <div id="C-301-2200" class="portlet">
+      <div class="portlet-header">C-301-2200</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">45</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div> 
+    <div id="EG-100-203" class="portlet">
+      <div class="portlet-header">EG-100-203</div>
+      <div class="portlet-content">
+        <span class="help-block">JN:&nbsp;<span class="workorder">23467</span></span>
+        <span class="help-block">Die:&nbsp;<span class="die">13011</span></span>
+        <span class="help-block">Qty:&nbsp;<span class="qty1">100000</span></span>
+        <span class="help-block">EST Hours:&nbsp;<span class="hours">32</span></span>
+        <div class="portlet-form portlet-edit">
+          <form role="form">
+            <div class="form-group">
+              <input type="text" class="form-control datepicker" placeholder="Date 1">
+              <input type="text" class="form-control datepicker" placeholder="Date 2">
+              <input type="text" class="form-control datepicker" placeholder="Date 3">
+              <textarea class="form-control" rows="2" placeholder="Notes"></textarea>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>

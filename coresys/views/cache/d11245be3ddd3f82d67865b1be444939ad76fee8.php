@@ -1,0 +1,2 @@
+
+<?php echo $__env->make('layouts.firebase', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\DEV_SERVER\htdocs\atmserv\coresys\views/pages/firebase.blade.php ENDPATH**/ ?>

@@ -1,0 +1,2 @@
+ID_ATM	SN
+30501		NCR SS22E	BKT0093	SWATMBKT1219	Cabang Pembantu Rantau Pulut	Puskesmas Batu Agung sukamandang	Desa Batu agung
