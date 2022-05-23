@@ -80,7 +80,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => (get_domain($actual_link)=='itsview.id' ? 'itsviewi_root' : 'root'),
 	'password' => (get_domain($actual_link)=='itsview.id' ? '@lopilopi123' : ''),
-	'database' => (get_domain($actual_link)=='itsview.id' ? 'itsviewi_premesis' : 'insan_cleaning'),
+	'database' => (get_domain($actual_link)=='itsview.id' ? 'itsviewi_premesis_new' : 'insan_cleaning'),
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
