@@ -258,7 +258,7 @@ class Trans_schedule extends MY_Controller {
 		
 		$param['query'] 		= trim($query);
 		$param['column_order'] 	= array(null, 'id');
-		$param['column_search'] = array('tid', 'kanwil', 'cabang', 'nama_unit', 'lokasi', 'alamat');
+		$param['column_search'] = array('master_atm.tid', 'kanwil', 'cabang', 'nama_unit', 'lokasi', 'alamat');
 		$param['order'] 		= array('master_atm.id' => 'desc');
 		// $param['where'] 		= array(array('merk_mesin' => 'DN Series 200V FL'), array('kanwil' => 'DENPASAR'));
 		$param['where'] 		= array(array('master_kelolaan_detail.id_kelolaan'=>$id_lokasi));
