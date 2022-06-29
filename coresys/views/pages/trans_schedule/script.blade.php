@@ -700,9 +700,37 @@
 					
 					// var base_url = "<?php echo base_url();?>/master_kelolaan_detail/";
 					var base_urlx = "<?php echo base_url();?>/master_atm/";
+					// table2 = this.$content.find('#datatable2').DataTable({
+						// "serverSide": true,
+						// "ajax": base_url + 'json_select_atm?id_lokasi='+id_lokasi,
+						// "columnDefs": [
+							// {
+								// "targets": 3,
+								// "checkboxes": {
+								   // "selectRow": true
+								// }
+							 // }
+						// ],
+						// "select": {
+							// "style": "multi"
+						// },
+						// "order": [[1, 'asc']]
+					// });
 					table2 = this.$content.find('#datatable2').DataTable({
 						"serverSide": true,
-						"ajax": base_url + 'json_select_atm?id_lokasi='+id_lokasi,
+						"ajax":{
+							url :  base_url + 'json_select_atm?id_lokasi='+id_lokasi,
+							type : 'POST',
+							dataFilter: function(data) {
+								console.log(data);
+								var json = jQuery.parseJSON( data );
+								json.recordsTotal = json.recordsTotal;
+								json.recordsFiltered = json.recordsFiltered;
+								json.data = json.data;
+
+								return JSON.stringify( json );
+							}
+						},
 						"columnDefs": [
 							{
 								"targets": 3,
@@ -714,7 +742,13 @@
 						"select": {
 							"style": "multi"
 						},
-						"order": [[1, 'asc']]
+						columns: [
+							{ "searchable": true, "orderable": true, "data": "tid" },
+							{ "searchable": true, "orderable": false, "data": "kanwil" },
+							{ "searchable": true, "orderable": false, "data": "alamat" },
+							{ "searchable": true, "orderable": false, "data": "tid2" },
+						],
+						"order": [[0, "asc"]],
 					});
 					
 					this.$content.find('.name').focus();

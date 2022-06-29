@@ -252,7 +252,7 @@ class Trans_schedule extends MY_Controller {
 	public function json_select_atm() {
 		$id_lokasi = (isset($_REQUEST['id_lokasi']) ? $_REQUEST['id_lokasi'] : 0);
 		// $query = "SELECT * FROM (SELECT * FROM master_atm WHERE tid NOT IN (SELECT tid FROM master_kelolaan_detail)) as master_atm";
-		$query = "SELECT * FROM (SELECT * FROM master_atm WHERE tid NOT IN (SELECT tid FROM trans_schedule_team)) as master_atm
+		$query = "SELECT master_atm.tid, master_atm.kanwil, master_atm.alamat FROM (SELECT * FROM master_atm WHERE tid NOT IN (SELECT tid FROM trans_schedule_team)) as master_atm
 					LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.tid=master_atm.tid)
 		";
 		
@@ -281,15 +281,23 @@ class Trans_schedule extends MY_Controller {
 		
 		
 		$key = 0;
+		$list = array();
 		foreach($object as $rows) {
 			$no++;
 			$url = base_url().'/master_kelolaan_detail';
-			$list[]= array(
-				$rows->tid,
-				$rows->kanwil,
-				$rows->alamat,
-				$rows->tid,
-			);
+			// $list[]= array(
+				// $rows->tid,
+				// $rows->kanwil,
+				// $rows->alamat,
+				// $rows->tid,
+			// );
+			
+			$list[$key]['tid'] = $rows->tid;
+			$list[$key]['kanwil'] = $rows->kanwil;
+			$list[$key]['alamat'] = $rows->alamat;
+			$list[$key]['tid2'] = $rows->tid;
+			
+			$key++;
 		}
 		
 		$out['data'] = $list;
