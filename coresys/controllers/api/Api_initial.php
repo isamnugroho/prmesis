@@ -41,6 +41,7 @@ class Api_initial extends REST_Controller {
 	
 	public function init_get() {
 		$today = date("Y-m-d");
+		$id_lokasi = $_REQUEST['data']['id_lokasi'];
 		$sql = "
 			SELECT * FROM trans_schedule
 			WHERE pic NOT IN (SELECT pic FROM trans_clean WHERE date = '$today')	
@@ -52,14 +53,10 @@ class Api_initial extends REST_Controller {
 			(SELECT count(*) FROM trans_clean LEFT JOIN trans_clean_detail ON(trans_clean_detail.id_detail=trans_clean.id) WHERE trans_clean.pic=trans_schedule.pic) as cnt_scheduled_detail
 			FROM trans_schedule	
 			WHERE 
-			pic NOT IN (SELECT pic FROM trans_clean WHERE date = '$today') OR 
-			(
-				(SELECT count(*) FROM trans_clean WHERE pic=trans_schedule.pic) = 0 OR
-				(SELECT count(*) FROM trans_clean LEFT JOIN trans_clean_detail ON(trans_clean_detail.id_detail=trans_clean.id) WHERE trans_clean.pic=trans_schedule.pic) != (SELECT count(*) FROM master_kelolaan LEFT JOIN master_kelolaan_detail ON(master_kelolaan_detail.id_kelolaan=master_kelolaan.id) WHERE master_kelolaan.id=trans_schedule.id_lokasi)
-			)
-			
+			trans_schedule.id_lokasi='$id_lokasi'
 		";
 		$result_schedule = $this->db->query($sql);
+		
 		$this->generate_schedule($result_schedule);
 		
 		// print_r($result_schedule->result());
@@ -72,6 +69,7 @@ class Api_initial extends REST_Controller {
 		if($result_schedule->num_rows()) {
 			$result = $result_schedule->result();
 			
+			$i = 0;
 			foreach($result as $row) {
 				$sql = "SELECT * FROM master_kelolaan 
 						LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
@@ -113,7 +111,7 @@ class Api_initial extends REST_Controller {
 							$response = [
 								'status' => 200,
 								'error' => false,
-								'messages' => 'Success generated schedule',
+								'messages' => 'Success generated schedule 1',
 								'data' => []
 							];
 						}
@@ -126,14 +124,29 @@ class Api_initial extends REST_Controller {
 						];
 						
 						$sql = "
-							SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail FROM master_kelolaan 
+							SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail 
+							FROM master_kelolaan 
 							LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
 							LEFT JOIN trans_clean ON (master_kelolaan.id=trans_clean.id_lokasi)
 							WHERE 
 							master_kelolaan.id='".$row->id_lokasi."' 
 							AND master_kelolaan_detail.id NOT IN (SELECT id_kelolaan_detail FROM trans_clean_detail)
 							AND trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+							AND master_kelolaan_detail.tid IN (SELECT tid FROM trans_schedule_team)
 						";
+						
+						// $sql = "
+							// SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail FROM master_kelolaan 
+							// LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
+							// LEFT JOIN trans_clean ON (master_kelolaan.id=trans_clean.id_lokasi)
+							// WHERE 
+							// master_kelolaan.id='".$row->id_lokasi."' 
+							// AND master_kelolaan_detail.id NOT IN (SELECT id_kelolaan_detail FROM trans_clean_detail)
+							// AND trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+						// ";
+						
+						
+						
 						$result_kelolaan = $this->db->query($sql);
 						if($result_kelolaan->num_rows()>0) {
 							$kelolaan = $result_kelolaan->result();
@@ -150,21 +163,35 @@ class Api_initial extends REST_Controller {
 							$response = [
 								'status' => 200,
 								'error' => false,
-								'messages' => 'Success generated schedule',
+								'messages' => 'Success generated schedule 2',
 								'data' => $data,
 								'sql' => trim(preg_replace('/(\v|\s)+/', ' ', $sql))
 							];
 						} else {
 							// TERHAPUS DARI DETAIL
+							// $sql = "
+								// SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail 
+								// FROM master_kelolaan 
+								// LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
+								// LEFT JOIN trans_clean ON (master_kelolaan.id=trans_clean.id_lokasi)
+								// WHERE 
+								// master_kelolaan.id='".$row->id_lokasi."' 
+								// AND master_kelolaan_detail.id NOT IN (SELECT id_kelolaan_detail FROM trans_clean_detail)
+								// AND trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+								// AND master_kelolaan_detail.tid IN (SELECT tid FROM trans_schedule_team)
+							// ";
 							$sql = "
-								SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail FROM master_kelolaan
+								SELECT *, master_kelolaan_detail.id as id_kelolaan_detail, trans_clean.id as id_detail 
+								FROM master_kelolaan
 								LEFT JOIN master_kelolaan_detail ON (master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
 								LEFT JOIN trans_clean ON (master_kelolaan.id=trans_clean.id_lokasi)
-								WHERE trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+								WHERE master_kelolaan.id='".$row->id_lokasi."' 
+								AND trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+								AND master_kelolaan_detail.tid IN (SELECT tid FROM trans_schedule_team)
 								AND master_kelolaan_detail.id NOT IN (
 									SELECT id_kelolaan_detail FROM trans_clean_detail
-								LEFT JOIN trans_clean ON (trans_clean.id=trans_clean_detail.id_detail)
-								WHERE trans_clean.date='$today' AND trans_clean.pic='$row->pic'
+									LEFT JOIN trans_clean ON (trans_clean.id=trans_clean_detail.id_detail)
+									WHERE trans_clean.date='$today' AND trans_clean.pic='$row->pic'
 								)
 							";
 							$result_kelolaan = $this->db->query($sql);
@@ -183,7 +210,7 @@ class Api_initial extends REST_Controller {
 								$response = [
 									'status' => 200,
 									'error' => false,
-									'messages' => 'Success generated schedule',
+									'messages' => 'Success generated schedule 3',
 									'data' => $data,
 									'sql' => trim(preg_replace('/(\v|\s)+/', ' ', $sql))
 								];
@@ -192,19 +219,17 @@ class Api_initial extends REST_Controller {
 							$response = [
 								'status' => 200,
 								'error' => false,
-								'messages' => 'Schedule already generated',
+								'messages' => 'Schedule already generated 1',
 								'data' => $data,
 								'sql' => trim(preg_replace('/(\v|\s)+/', ' ', $sql))
 							];
 						}
-						
-						
 					}
-				}else {
+				} else {
 					$response = [
 						'status' => 500,
 						'error' => true,
-						'messages' => 'No data',
+						'messages' => 'No data 1',
 						'data' => []
 					];
 				}
@@ -213,7 +238,7 @@ class Api_initial extends REST_Controller {
 			$response = [
 				'status' => 500,
 				'error' => true,
-				'messages' => 'No data',
+				'messages' => 'No data 2',
 				'data' => []
 			];
 		}
@@ -290,7 +315,7 @@ class Api_initial extends REST_Controller {
 						$response = [
 							'status' => 200,
 							'error' => false,
-							'messages' => 'Schedule already generated',
+							'messages' => 'Schedule already generated 2',
 							'data' => [
 								'profile' => $authorized
 							]
