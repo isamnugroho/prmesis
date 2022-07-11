@@ -123,16 +123,16 @@ class Trans_complaint extends MY_Controller {
 		 */
 
 		$joinQuery = "
-						FROM trans_complaint AS a 
-						LEFT JOIN trans_complaint_detail AS b ON(a.id=b.id_detail) 
-						LEFT JOIN master_kelolaan_detail AS c ON(c.id=b.id_kelolaan_detail) 
-						LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id) 
-						LEFT JOIN master_atm AS e ON(e.tid=c.tid) 
+			FROM trans_complaint AS a 
+			LEFT JOIN trans_complaint_detail AS b ON(a.id=b.id_detail) 
+			LEFT JOIN master_kelolaan_detail AS c ON(c.id=b.id_kelolaan_detail) 
+			LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id) 
+			LEFT JOIN master_atm AS e ON(e.tid=c.tid) 
 		";
 		
 		
 		$extraWhere = "";
-		$groupBy = "a.pic";
+		$groupBy = "";
 		$having = "";
 
 		echo json_encode(

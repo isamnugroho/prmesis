@@ -62,6 +62,10 @@ $route['api/initial'] = function () {
 	return 'api/api_initial/init';
 };
 
+$route['api/request_switch'] = function () {
+	return 'api/api_clean/request_switch';
+};
+
 $route['api/scheduled'] = function () {
 	return 'api/api_clean/get_scheduled';
 };

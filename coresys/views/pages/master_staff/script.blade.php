@@ -1276,7 +1276,7 @@
 					var jc = this;
 					
 					
-					jc.$content.find('#id').val(rows.id);
+					jc.$content.find('#id').val(rows.id_petugas);
 					jc.$content.find('#nik').val(rows.nik);
 					jc.$content.find('#nama').val(rows.nama);
 					jc.$content.find('#hp').val(rows.hp);
@@ -1319,6 +1319,31 @@
 					// jc.$content.find('#alamat').val(rows.alamat);
 					// jc.$content.find('#kode_vendor').val(rows.kode_vendor);
 					// jc.$content.find('#telp').val(rows.telp);
+					console.log(rows);
+					
+					var $select4 = this.$content.find('#kanwil')
+					$select4.select2({
+						tokenSeparators: [','],
+						ajax: {
+							dataType: 'json',
+							url: '<?php echo base_url().'/select2/select_kanwil_by_location'?>',
+							delay: 250,
+							type: "POST",
+							data: function(params) {
+								return {
+									kode_koord: rows.nik.substring(0, rows.nik.lastIndexOf("-")),
+									search: params.term,
+								}
+							},
+							processResults: function (data, page) {
+								return {
+									results: data
+								};
+							}
+						}
+					});
+					var $newOption = $("<option selected='selected'></option>").val(rows.id_lokasi).text(rows.grup_area);
+					$select4.append($newOption).trigger('change');
 					
 					this.$content.find('form').on('submit', function (e) {
 						// if the user submits the form by pressing enter in the field.

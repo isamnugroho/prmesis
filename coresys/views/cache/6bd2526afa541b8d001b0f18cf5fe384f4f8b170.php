@@ -1,7 +1,7 @@
-@extends('layouts.master_layout')
 
-@section('content')
-	@include('pages/trans_switch/style')
+
+<?php $__env->startSection('content'); ?>
+	<?php echo $__env->make('pages/trans_switch/style', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 	<section id="widget-grid" class="">
 		<div class="row">
 			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0px 0px 0px 0px;">
@@ -228,6 +228,8 @@
 			</div>
 		</div>
 	</article>
-@endsection
-@include('pages/trans_switch/script')
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('pages/trans_switch/script', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+
+<?php echo $__env->make('layouts.master_layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\APLIKASI\laragon-portable\www\prmesis\coresys\views/pages/trans_switch/index.blade.php ENDPATH**/ ?>

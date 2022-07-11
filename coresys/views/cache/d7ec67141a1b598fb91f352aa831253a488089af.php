@@ -279,13 +279,13 @@
 								}
 							}
 						});
-						
-						
+						$select_ga.val(null).trigger('change');
 						
 						$select_ga.on('select2:select', function (e) {
 							jc.$content.find('#view_switch').show();
 							var data = e.params.data;
 							var ga = data.text;
+							var id_lokasi = data.id;
 							
 							// alert(data.text+" "+data.id);
 							
@@ -310,6 +310,7 @@
 									}
 								}
 							});
+							$select_tid.val(null).trigger('change');
 							
 							$select_pic.select2({
 								tokenSeparators: [','],
@@ -322,7 +323,7 @@
 									data: function(params) {
 										return {
 											search: params.term,
-											kanwil: kanwil,
+											kanwil: id_lokasi,
 										}
 									},
 									processResults: function (data, page) {
@@ -332,7 +333,14 @@
 									}
 								}
 							});
+							$select_pic.val(null).trigger('change');
+							
 						});
+						
+						$select_tid.on('select2:select', function (e) {
+							$select_pic.val(null).trigger('change');
+						});
+						
 					});
 					
 				}

@@ -154,6 +154,7 @@
 												<th>NO</th>
 												<th>NIK</th>
 												<th>Nama</th>
+												<th>Area Kelolaan</th>
 												<th width="280px">Action</th>
 											</tr>
 										</thead>

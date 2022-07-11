@@ -1,4 +1,4 @@
-@section('javascript')
+<?php $__env->startSection('javascript'); ?>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/moment.js"></script>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-daterangepicker.js"></script>
@@ -6,7 +6,7 @@
 		pageSetUp();
 		
 		var table;
-		var base_url = "<?php echo base_url();?>/trans_switch/";
+		var base_url = "<?php echo base_url();?>/report_cleaning_complaint/";
 		var pagefunction = function() {
 			var responsiveHelper_dt_basic = undefined;
 			var responsiveHelper_datatable_fixed_column = undefined;
@@ -63,18 +63,42 @@
 				},
 				"pageLength" : 10,
 				"serverSide": true,
-				"ajax": base_url + 'json_ssp',
-				"order": [[1, "asc"]],
+				// "ajax":{
+					// url :  base_url + 'json',
+					// type : 'POST',
+					// dataFilter: function(data) {
+						// console.log(data);
+						// var json = jQuery.parseJSON( data );
+						// json.recordsTotal = json.recordsTotal;
+						// json.recordsFiltered = json.recordsFiltered;
+						// json.data = json.data;
+
+						// return JSON.stringify( json );
+					// }
+				// },
+				"ajax": base_url + 'json',
+				"order": [[1, "desc"]],
 				"columnDefs": [
 					{"render": function ( data, type, row ) {
-						if(data!=="") {
-							// return '<a href="'+base_url+"get_report/?objectName="+data+'" target="__blank"><button onclick="">Download Report Pagi</button></a>';
-							
-							return "<center><a onclick='assignJob(\""+data+"\")' class='btn btn-primary btn-sm zoomsmall'>ASSIGN JOB</a>";
+						if(data!==null && data!=="backup") {
+							var param = "?objectName="+data+"&id_detail="+row[0]+"&job_type=PAGI";
+							return '<button class="zoomsmall" style="background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); border-radius: 4px;font-weight:bold;" onclick="openPreview(\''+data+'\', \''+row[0]+'\', \'PAGI\')"><img style="float: left; margin: 1px 5px 0px 0px;" src="<?=BASE_LAYOUT?>seipkon/assets/img/search.png" height="15" width="15" />View</button> <a style="font-color: black; color: black" href="'+base_url+"get_rep2/"+param+'" target="__blank"><button class="zoomsmall" style="background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); border-radius: 4px;font-weight:bold;" onclick=""><img style="float: left; margin: 1px 5px 0px 0px;" src="<?=BASE_LAYOUT?>seipkon/assets/img/cloud.png" height="17" width="17" />Download Report Pagi</button></a>';
+						} else if(data=="backup") {
+							return "Data has been backed up";
 						} else {
 							return "No report available";
 						}
-					}, "targets": [8]}
+					}, "targets": [6]},
+					{"render": function ( data, type, row ) {
+						if(data!==null && data!=="backup") {
+							var param = "?objectName="+data+"&id_detail="+row[0]+"&job_type=SORE";
+							return '<button class="zoomsmall" style="background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); border-radius: 4px;font-weight:bold;" onclick="openPreview(\''+data+'\', \''+row[0]+'\', \'SORE\')"><img style="float: left; margin: 1px 5px 0px 0px;" src="<?=BASE_LAYOUT?>seipkon/assets/img/search.png" height="15" width="15" />View</button> <a style="font-color: black; color: black" href="'+base_url+"get_rep2/?objectName="+data+'" target="__blank"><button class="zoomsmall" style="background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); border-radius: 4px;font-weight:bold;" onclick=""><img style="float: left; margin: 1px 5px 0px 0px;" src="<?=BASE_LAYOUT?>seipkon/assets/img/cloud.png" height="17" width="17" />Download Report Sore</button></a>';
+						} else if(data=="backup") {
+							return "Data has been backed up";
+						} else {
+							return "No report available";
+						}
+					}, "targets": [7]}
 				],
 			});
 			
@@ -115,7 +139,7 @@
 			});
 		};
 		
-		function openPreview(objectName) {
+		function openPreview(objectName, id_detail, job_type) {
 			var content = $('.content_form_preview').clone().html();
 			
 			$.confirm({
@@ -147,12 +171,14 @@
 					// });
 					// jc.showLoading();
 					
+					// alert(base_url + 'get_reportx?id_detail='+id_detail+'&job_type='+job_type);
+					
 					var a = $.confirm({
 						lazyOpen: true,
 					});
 					a.open();
 					a.showLoading();
-					jc.$content.find("#iframe").attr('src', base_url + 'get_reportx?objectName='+objectName)
+					jc.$content.find("#iframe").attr('src', base_url + 'get_rep?objectName='+objectName+'&id_detail='+id_detail+'&job_type='+job_type)
 					jc.$content.find("#iframe").on("load", function() {
 						a.close();
 					});
@@ -168,8 +194,7 @@
 				title: false,
 				theme: 'light',
 				content: content,
-				columnClass: 'col-sm-6 col-md-offset-3',
-				useBootstrap: true,
+				columnClass: 'col-md-4 col-md-offset-4',
 				buttons: {
 					formSubmit: {
 						text: 'Submit',
@@ -180,42 +205,58 @@
 							var url = self.$content.find('form')[0].action;
 							var form = self.$content.find('form')[0];
 							var formData = new FormData(form);
-							self.showLoading();
+							console.log(form)
 							
-							$.ajax({
-								url: url,
-								dataType: 'html',
-								method: 'post',
-								processData: false,
-								contentType: false,
-								cache: false,
-								data: formData,
-								timeout: 3000,
-							}).done(function (response) {
-								if(response=="success") {
-									self.close();
-									$.confirm({
-										title: false,
-										content: 'SUCCESS',
-										autoClose: 'ok|1000',
-										buttons: {
-											ok: function () {
+							var report_type = this.$content.find('#search_by').val();
+							
+							if(report_type=='daily') {								
+								date_daily = self.$content.find('input[name=date_daily]').val();
+								kanwil = self.$content.find('select[name=kanwil]').val();
+								console.log(base_url + 'json?date_daily='+date_daily);
+								table.ajax.url(base_url + 'json?date_daily='+date_daily+'&kanwil='+kanwil).load();
+							} else if(report_type=='monthly') {
+								date_monthly = self.$content.find('input[name=date_montly]').val();
+								kanwil = self.$content.find('select[name=kanwil]').val();
+								console.log(base_url + 'json?date_monthly='+date_monthly);
+								table.ajax.url(base_url + 'json?date_monthly='+date_monthly+'&kanwil='+kanwil).load();
+							}
+							
+							// self.showLoading();
+							
+							// $.ajax({
+								// url: url,
+								// dataType: 'html',
+								// method: 'post',
+								// processData: false,
+								// contentType: false,
+								// cache: false,
+								// data: formData,
+								// timeout: 3000,
+							// }).done(function (response) {
+								// if(response=="success") {
+									// self.close();
+									// $.confirm({
+										// title: false,
+										// content: 'SUCCESS',
+										// autoClose: 'ok|1000',
+										// buttons: {
+											// ok: function () {
 												
-											}
-										}
-									});
+											// }
+										// }
+									// });
 									
-									table.ajax.reload( null, false );
-								} else {
-									self.hideLoading();
-									$.alert('Something wrong!');
-								}
-							}).fail(function(){
-								self.hideLoading();
-								$.alert('Something went wrong.');
-							});
+									// table.ajax.reload( null, false );
+								// } else {
+									// self.hideLoading();
+									// $.alert('Something wrong!');
+								// }
+							// }).fail(function(){
+								// self.hideLoading();
+								// $.alert('Something went wrong.');
+							// });
 							
-							return false;
+							// return false;
 						}
 					},
 					cancel: function () {
@@ -228,11 +269,11 @@
 					
 					var $select_search_by = this.$content.find('#search_by')
 					var $select_kanwil = this.$content.find('#kanwil')
-					var $select_pic_from = this.$content.find('#pic_from')
-					var $select_pic_to = this.$content.find('#pic_to')
+					var $select_pic = this.$content.find('#pic')
+					var $select_team = this.$content.find('#team')
 					
 					
-					var data = [{id: 'harian', text: 'Harian'},{id: 'range', text: 'Range'}];
+					var data = [{id: 'daily', text: 'Daily'},{id: 'monthly', text: 'Monthly'},{id: 'range', text: 'Range'}];
 					$select_search_by.select2({
 						placeholder: "Select Report Type",
 						data: data
@@ -244,18 +285,16 @@
 						
 						
 						jc.$content.find('#view_date').hide();
-						jc.$content.find('#view_switch').show();
-						jc.$content.find('#view_reason').hide();
-						jc.$content.find('#date_harian').hide();
+						jc.$content.find('#date_daily').hide();
 						jc.$content.find('#date_montly').hide();
 						jc.$content.find('#date_range').hide();
 						jc.$content.find('#text_view_date').html("("+data.text+")");
 						
-						if(report_type=='harian') {
+						if(report_type=='daily') {
 							jc.$content.find('#view_date').show();
-							jc.$content.find('#date_harian').show();
+							jc.$content.find('#date_daily').show();
 						
-							jc.$content.find('#date_harian').datepicker({
+							jc.$content.find('#date_daily').datepicker({
 								autoclose: true,
 								minViewMode: 0,
 								todayBtn: true,
@@ -266,6 +305,20 @@
 								var tahun = selected.date.getFullYear(); 
 							});
 
+						} else if(report_type=='monthly') {
+							jc.$content.find('#view_date').show();
+							jc.$content.find('#date_montly').show();
+							jc.$content.find('#date_montly').datepicker({
+								autoclose: true,
+								minViewMode: 0,
+								todayHighlight: true,
+								format: "mm/yyyy",
+								startView: "months", 
+								minViewMode: "months"	
+							}).on('changeDate', function(selected){
+								var bulan = ("0" + (selected.date.getMonth() + 1)).slice(-2);
+								var tahun = selected.date.getFullYear(); 
+							}); 
 						} else if(report_type=='range') {
 							jc.$content.find('#view_date').show();
 							jc.$content.find('#date_range').show();
@@ -300,65 +353,6 @@
 							}
 						});
 						
-						$select_kanwil.on('select2:select', function (e) {
-							var data = e.params.data;
-							var kanwil = data.text;
-							
-							$select_pic_from.select2({
-								tokenSeparators: [','],
-								placeholder: "Select Petugas",
-								ajax: {
-									dataType: 'json',
-									url: '<?php echo base_url().'/select2/select_petugas_by_kanwil'?>',
-									delay: 250,
-									type: "GET",
-									data: function(params) {
-										return {
-											search: params.term,
-											kanwil: kanwil,
-										}
-									},
-									processResults: function (data, page) {
-										return {
-											results: data
-										};
-									}
-								}
-							});
-							
-							
-							$select_pic_from.on('select2:select', function (e) {
-								var data = e.params.data;
-								var pic_from = data.id;
-								
-								$select_pic_to.select2({
-									tokenSeparators: [','],
-									placeholder: "Select Petugas",
-									ajax: {
-										dataType: 'json',
-										url: '<?php echo base_url().'/select2/select_petugas_by_kanwil_switch'?>',
-										delay: 250,
-										type: "GET",
-										data: function(params) {
-											return {
-												search: params.term,
-												kanwil: kanwil,
-												from: pic_from,
-											}
-										},
-										processResults: function (data, page) {
-											return {
-												results: data
-											};
-										}
-									}
-								});
-								
-								$select_pic_to.on('select2:select', function (e) {
-									jc.$content.find('#view_reason').show();
-								});
-							});
-						});
 					});
 				}
 			});
@@ -600,230 +594,6 @@
 			});
 		}
 		
-		function assignJob(id_detail) {
-			var content = $('.content_assign').clone().html();
-			
-			$.confirm({
-				draggable: false,
-				title: false,
-				theme: 'light',
-				content: content,
-				columnClass: 'col-sm-6 col-md-offset-3',
-				useBootstrap: true,
-				buttons: {
-					formSubmit: {
-						text: 'Submit',
-						btnClass: 'btn-blue',
-						action: function () {
-							var self = this;
-							
-							var url = self.$content.find('form')[0].action;
-							var form = self.$content.find('form')[0];
-							var formData = new FormData(form);
-							self.showLoading();
-							
-							$.ajax({
-								url: url,
-								dataType: 'html',
-								method: 'post',
-								processData: false,
-								contentType: false,
-								cache: false,
-								data: formData,
-								timeout: 3000,
-							}).done(function (response) {
-								if(response=="success") {
-									self.close();
-									$.confirm({
-										title: false,
-										content: 'SUCCESS',
-										autoClose: 'ok|1000',
-										buttons: {
-											ok: function () {
-												
-											}
-										}
-									});
-									
-									table.ajax.reload( null, false );
-								} else {
-									self.hideLoading();
-									$.alert('Something wrong!');
-								}
-							}).fail(function(){
-								self.hideLoading();
-								$.alert('Something went wrong.');
-							});
-							
-							return false;
-						}
-					},
-					cancel: function () {
-						//close
-					},
-				},
-				onContentReady: function () {
-					var jc = this;
-					
-					var $select_search_by = this.$content.find('#search_by')
-					var $select_kanwil = this.$content.find('#kanwil')
-					var $select_pic_from = this.$content.find('#pic_from')
-					var $select_pic_to = this.$content.find('#pic_to')
-					
-					
-					var data = [{id: 'harian', text: 'Harian'},{id: 'range', text: 'Range'}];
-					$select_search_by.select2({
-						placeholder: "Select Report Type",
-						data: data
-					});
-					
-					$select_search_by.on('select2:select', function (e) {
-						var data = e.params.data;
-						var report_type = data.id;
-						
-						
-						jc.$content.find('#view_date').hide();
-						jc.$content.find('#view_switch').show();
-						jc.$content.find('#view_reason').hide();
-						jc.$content.find('#date_harian').hide();
-						jc.$content.find('#date_montly').hide();
-						jc.$content.find('#date_range').hide();
-						jc.$content.find('#text_view_date').html("("+data.text+")");
-						
-						if(report_type=='harian') {
-							jc.$content.find('#view_date').show();
-							jc.$content.find('#date_harian').show();
-						
-							jc.$content.find('#date_harian').datepicker({
-								autoclose: true,
-								minViewMode: 0,
-								todayBtn: true,
-								format: 'dd/mm/yyyy',
-								todayHighlight: true,
-							}).on('changeDate', function(selected){
-								var bulan = ("0" + (selected.date.getMonth() + 1)).slice(-2);
-								var tahun = selected.date.getFullYear(); 
-							});
-
-						} else if(report_type=='range') {
-							jc.$content.find('#view_date').show();
-							jc.$content.find('#date_range').show();
-							jc.$content.find('#date_range').daterangepicker({
-								opens: 'left',
-								locale: {
-									format: 'DD/MM/YYYY'
-								}
-							}, function(start, end, label) {
-								console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-							});
-						}
-						
-						$select_kanwil.select2({
-							tokenSeparators: [','],
-							placeholder: "Select KANWIL",
-							ajax: {
-								dataType: 'json',
-								url: '<?php echo base_url().'/select2/select_kanwil_by_location'?>',
-								delay: 250,
-								type: "POST",
-								data: function(params) {
-									return {
-										search: params.term,
-									}
-								},
-								processResults: function (data, page) {
-									return {
-										results: data
-									};
-								}
-							}
-						});
-						
-						$select_kanwil.on('select2:select', function (e) {
-							var data = e.params.data;
-							var id_kanwil = data.id;
-							var kanwil = data.text;
-							
-							// alert(id+" "+kanwil);
-							
-							$select_pic_from.select2({
-								tokenSeparators: [','],
-								placeholder: "Select Petugas",
-								ajax: {
-									dataType: 'json',
-									url: '<?php echo base_url().'/select2/select_petugas_by_kanwil'?>',
-									delay: 250,
-									type: "GET",
-									data: function(params) {
-										return {
-											search: params.term,
-											id_kanwil: id_kanwil,
-											kanwil: kanwil,
-										}
-									},
-									processResults: function (data, page) {
-										return {
-											results: data
-										};
-									}
-								}
-							});
-							
-							$.ajax({
-								url: "<?php echo base_url();?>/select2/get_petugas_by_kanwil_switch/"+id_detail,
-								dataType: "html",
-								method: "get",
-								timeout: 3000,
-							}).done(function (response) {
-								// console.log(response);
-								var json = JSON.parse(response);
-								var $newOption = $("<option selected='selected'></option>").val(json.nik).text("("+json.nik+") "+json.nama_petugas);
-								$select_pic_from.append($newOption).trigger('change');
-								
-								// $select_pic_from.on('select2:select', function (e) {
-								// var data = e.params.data;
-								// var pic_from = data.id;
-									
-									$select_pic_to.select2({
-										tokenSeparators: [','],
-										placeholder: "Select Petugas",
-										ajax: {
-											dataType: 'json',
-											url: '<?php echo base_url().'/select2/select_petugas_by_kanwil_switch'?>',
-											delay: 250,
-											type: "GET",
-											data: function(params) {
-												return {
-													search: params.term,
-													id_kanwil: id_kanwil,
-													from: json.nik,
-												}
-											},
-											processResults: function (data, page) {
-												return {
-													results: data
-												};
-											}
-										}
-									});
-									
-									$select_pic_to.on('select2:select', function (e) {
-										jc.$content.find('#view_reason').show();
-									});
-								// });
-							}).fail(function(){
-								console.log("fail");
-							});
-							
-							
-							
-							
-						});
-					});
-				}
-			});
-		}
-		
 		function deleteAction(url) {
 			$.confirm({
 				title: 'Delete data?',
@@ -868,4 +638,4 @@
 			});
 		});
 	</script>
-@endsection
+<?php $__env->stopSection(); ?><?php /**PATH D:\APLIKASI\laragon-portable\www\prmesis\coresys\views/pages/report_cleaning_complaint/script.blade.php ENDPATH**/ ?>

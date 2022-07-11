@@ -1,4 +1,4 @@
-@section('javascript')
+<?php $__env->startSection('javascript'); ?>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/moment.js"></script>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-datepicker.js"></script>
 	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-daterangepicker.js"></script>
@@ -868,4 +868,4 @@
 			});
 		});
 	</script>
-@endsection
+<?php $__env->stopSection(); ?><?php /**PATH D:\APLIKASI\laragon-portable\www\prmesis\coresys\views/pages/trans_switch/script.blade.php ENDPATH**/ ?>

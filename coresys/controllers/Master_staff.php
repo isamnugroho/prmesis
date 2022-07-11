@@ -165,11 +165,19 @@ class Master_staff extends MY_Controller {
 		};
 		
 		$kelolaan = function($nik) {
-			$sql = $this->db->query("SELECT * FROM trans_schedule LEFT JOIN master_kelolaan ON (master_kelolaan.id=trans_schedule.id_lokasi) WHERE trans_schedule.pic='$nik'")->row();
-			if($sql->grup_area=="") {
+			$sql = $this->db->query("SELECT * FROM trans_schedule LEFT JOIN master_kelolaan ON (master_kelolaan.id=trans_schedule.id_lokasi) WHERE trans_schedule.pic='$nik'");
+			if($sql->num_rows()==0) {
 				return "<p style='color: red'>User belum di set schedule</p>";
 			} else {
-				return $sql->grup_area;
+				$ga = array();
+				foreach($sql->result_array() as $r) {
+					$ga[] = $r['grup_area'];
+				}
+				
+				$res 	= '<ul style="padding-left: 10px; list-style-type:disc">';
+				$res .= '<li>' . implode( '</li><li>', $ga) . '</li>';
+				$res .= '</ul>';
+				return $res;
 			}
 		};
 		
@@ -211,7 +219,7 @@ class Master_staff extends MY_Controller {
 	public function json_list_petugas() {
 		$id_koord = (isset($_REQUEST['id_koord']) ? $_REQUEST['id_koord'] : 0);
 		// $query = "SELECT * FROM (SELECT * FROM master_atm WHERE tid NOT IN (SELECT tid FROM master_kelolaan_detail)) as master_atm";
-		$query = "SELECT * FROM master_staff_petugas";
+		$query = "SELECT *, master_staff_petugas.id as id_petugas FROM master_staff_petugas LEFT JOIN master_kelolaan ON (master_kelolaan.id=master_staff_petugas.id_lokasi)";
 		
 		$param['query'] 		= trim($query);
 		$param['column_order'] 	= array(null, 'id');
@@ -257,6 +265,7 @@ class Master_staff extends MY_Controller {
 				$no,
 				$rows->nik,
 				$rows->nama,
+				$rows->grup_area,
 				"<center>
 				$add_acc
 				<a onclick='updateModalPetugas(".json_encode($rows).")' class='btn btn-warning btn-sm zoomsmall' style='background: linear-gradient(to bottom, #fe8c00, #f83600);border-radius: 4px;font-weight:bold;'><img style='float: left; margin: 1px 5px 0px 0px; height:15px; width:15px; ' src='".BASE_LAYOUT."/img/edit.png'/>Edit</a>

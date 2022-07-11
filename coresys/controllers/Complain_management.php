@@ -72,13 +72,13 @@ class Complain_management extends MY_Controller {
 		// indexes
 		$columns = array(
 			array( 'db' => '`a`.`id`', 					'dt' => 0, 		'field' => 'id' ),
-			array( 'db' => '`e`.`kanwil`', 				'dt' => 1, 		'field' => 'kanwil' ),
-			array( 'db' => '`d`.`grup_area`',			'dt' => 2, 		'field' => 'grup_area' ),
-			array( 'db' => '`a`.`pic_from`', 			'dt' => 3, 		'field' => 'pic_from' ),
-			array( 'db' => '`a`.`pic_to`', 				'dt' => 4, 		'field' => 'pic_to' ),
-			array( 'db' => '`a`.`date_from`',			'dt' => 5, 		'field' => 'date_from' ),
-			array( 'db' => '`a`.`date_to`',				'dt' => 6, 		'field' => 'date_to' ),
-			array( 'db' => '`a`.`reason`',				'dt' => 7, 		'field' => 'reason' ),
+			array( 'db' => '`e`.`kanwil`', 			'dt' => 1, 		'field' => 'kanwil' ),
+			array( 'db' => '`d`.`grup_area`',		'dt' => 2, 		'field' => 'grup_area' ),
+			array( 'db' => '`a`.`pic_from`', 		'dt' => 3, 		'field' => 'pic_from' ),
+			array( 'db' => '`a`.`pic_to`', 			'dt' => 4, 		'field' => 'pic_to' ),
+			array( 'db' => '`a`.`date_from`',		'dt' => 5, 		'field' => 'date_from' ),
+			array( 'db' => '`a`.`date_to`',			'dt' => 6, 		'field' => 'date_to' ),
+			array( 'db' => '`a`.`reason`',			'dt' => 7, 		'field' => 'reason' ),
 			array( 'db' => '`a`.`id`', 					'dt' => 8, 		'field' => 'id' ),
 		);
 
@@ -96,11 +96,11 @@ class Complain_management extends MY_Controller {
 		 */
 
 		$joinQuery = "
-						FROM trans_switch AS a
-						LEFT JOIN trans_schedule_team AS b ON(a.pic_from=b.pic)
-						LEFT JOIN master_kelolaan_detail AS c ON(c.tid=b.tid)
-						LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id)
-						LEFT JOIN master_atm AS e ON(e.tid=c.tid)
+			FROM trans_switch AS a
+			LEFT JOIN trans_schedule_team AS b ON(a.pic_from=b.pic)
+			LEFT JOIN master_kelolaan_detail AS c ON(c.tid=b.tid)
+			LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id)
+			LEFT JOIN master_atm AS e ON(e.tid=c.tid)
 		";
 		
 		

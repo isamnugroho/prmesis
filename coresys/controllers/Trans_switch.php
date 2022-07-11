@@ -75,16 +75,28 @@ class Trans_switch extends MY_Controller {
 		// parameter represents the DataTables column identifier. In this case simple
 		// indexes
 		$columns = array(
-			array( 'db' => '`a`.`id`', 					'dt' => 0, 		'field' => 'id' ),
+			array( 'db' => '`a`.`timestamp`', 					'dt' => 0, 		'field' => 'timestamp', "formatter" => function ($value, $row) { return date("d/m/Y", strtotime($value)); } ),
 			array( 'db' => '`e`.`kanwil`', 				'dt' => 1, 		'field' => 'kanwil' ),
 			array( 'db' => '`d`.`grup_area`',			'dt' => 2, 		'field' => 'grup_area' ),
-			array( 'db' => '`a`.`pic_from`', 			'dt' => 3, 		'field' => 'pic_from' ),
-			array( 'db' => '`a`.`pic_to`', 				'dt' => 4, 		'field' => 'pic_to' ),
-			array( 'db' => '`a`.`date_from`',			'dt' => 5, 		'field' => 'date_from' ),
-			array( 'db' => '`a`.`date_to`',				'dt' => 6, 		'field' => 'date_to' ),
-			array( 'db' => '`a`.`reason`',				'dt' => 7, 		'field' => 'reason' ),
-			array( 'db' => '`a`.`id`', 					'dt' => 8, 		'field' => 'id' ),
+			array( 'db' => '`f`.`pic`', 					'dt' => 3, 		'field' => 'pic' ),
+			array( 'db' => '`g`.`pic_to`', 				'dt' => 4, 		'field' => 'pic_to' ),
+			array( 'db' => '`g`.`date_from`',			'dt' => 5, 		'field' => 'date_from' ),
+			array( 'db' => '`g`.`date_to`',				'dt' => 6, 		'field' => 'date_to' ),
+			array( 'db' => '`g`.`reason`',				'dt' => 7, 		'field' => 'reason' ),
+			array( 'db' => '`a`.`id`', 						'dt' => 8, 		'field' => 'id' ),
 		);
+		
+		// $columns = array(
+			// array( 'db' => '`a`.`id`', 					'dt' => 0, 		'field' => 'id' ),
+			// array( 'db' => '`e`.`kanwil`', 				'dt' => 1, 		'field' => 'kanwil' ),
+			// array( 'db' => '`d`.`grup_area`',			'dt' => 2, 		'field' => 'grup_area' ),
+			// array( 'db' => '`a`.`pic_from`', 			'dt' => 3, 		'field' => 'pic_from' ),
+			// array( 'db' => '`a`.`pic_to`', 				'dt' => 4, 		'field' => 'pic_to' ),
+			// array( 'db' => '`a`.`date_from`',			'dt' => 5, 		'field' => 'date_from' ),
+			// array( 'db' => '`a`.`date_to`',				'dt' => 6, 		'field' => 'date_to' ),
+			// array( 'db' => '`a`.`reason`',				'dt' => 7, 		'field' => 'reason' ),
+			// array( 'db' => '`a`.`id`', 					'dt' => 8, 		'field' => 'id' ),
+		// );
 
 		// SQL server connection information
 		$sql_details = array(
@@ -99,18 +111,27 @@ class Trans_switch extends MY_Controller {
 		 * server-side, there is no need to edit below this line.
 		 */
 
+		// $joinQuery = "
+						// FROM trans_switch AS a
+						// LEFT JOIN trans_schedule_team AS b ON(a.pic_from=b.pic)
+						// LEFT JOIN master_kelolaan_detail AS c ON(c.tid=b.tid)
+						// LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id)
+						// LEFT JOIN master_atm AS e ON(e.tid=c.tid)
+		// ";
+
 		$joinQuery = "
-						FROM trans_switch AS a
-						LEFT JOIN trans_schedule_team AS b ON(a.pic_from=b.pic)
-						LEFT JOIN master_kelolaan_detail AS c ON(c.tid=b.tid)
+						FROM trans_clean_detail AS a
+						LEFT JOIN trans_clean AS b ON(a.id_detail=b.id)
+						LEFT JOIN master_kelolaan_detail AS c ON(a.id_kelolaan_detail=c.id)
 						LEFT JOIN master_kelolaan AS d ON(c.id_kelolaan=d.id)
 						LEFT JOIN master_atm AS e ON(e.tid=c.tid)
+						LEFT JOIN trans_schedule_team AS f ON(c.tid=f.tid)
+						LEFT JOIN trans_switch AS g ON(g.pic_from=f.pic)
 		";
 		
 		
-		$extraWhere = "";
-		// $groupBy = "b.pic";
-		$groupBy = "a.id";
+		$extraWhere = "a.jenis_job='request_switch'";
+		$groupBy = "";
 		$having = "";
 
 		echo json_encode(
@@ -131,6 +152,15 @@ class Trans_switch extends MY_Controller {
 			LEFT JOIN master_kelolaan_detail ON(master_kelolaan_detail.tid=trans_schedule_team.tid)
 			LEFT JOIN master_kelolaan ON(master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
 			LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid)
+		";
+		
+		$query = "
+			SELECT * FROM trans_clean_detail 
+			LEFT JOIN trans_clean ON(trans_clean.id=trans_clean_detail.id_detail)
+			LEFT JOIN master_kelolaan_detail ON(master_kelolaan_detail.id=trans_clean_detail.id_kelolaan_detail)
+			LEFT JOIN master_kelolaan ON(master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
+			LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid)
+			WHERE trans_clean_detail.jenis_job='request_switch'
 		";
 		
 		$param['query'] 		= trim($query);

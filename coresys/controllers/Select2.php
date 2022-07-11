@@ -133,7 +133,7 @@ class Select2 extends MY_Controller {
 			$key=0;
 			foreach ($result as $row) {
 				if($row->id!=="") {
-					$list[$key]['id'] = $row->kanwil;
+					$list[$key]['id'] = $row->id;
 					$list[$key]['text'] = $row->kanwil; 
 					$key++;
 				}
@@ -174,7 +174,9 @@ class Select2 extends MY_Controller {
 		$query = "SELECT *, master_kelolaan_detail.id as id_kelolaan_detail FROM master_kelolaan_detail 
 					LEFT JOIN master_kelolaan ON(master_kelolaan.id=master_kelolaan_detail.id_kelolaan)
 					LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid)
-					WHERE master_kelolaan.grup_area='$ga' AND (master_atm.alamat LIKE '%$search%' OR master_atm.tid LIKE '%$search%')";
+					WHERE master_kelolaan.grup_area='$ga' 
+					AND master_atm.tid IN (SELECT tid FROM trans_schedule_team)
+					AND (master_atm.alamat LIKE '%$search%' OR master_atm.tid LIKE '%$search%')";
 		$result = $this->db->query($query)->result();
 		
 		$bank = function($id) {
@@ -352,9 +354,10 @@ class Select2 extends MY_Controller {
 		}
 	}
 	
+	// USED BY trans_switch
 	public function select_petugas_by_kanwil() {
 		$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
-		$kanwil = isset($_REQUEST['kanwil']) ? $_REQUEST['kanwil'] : $this->uri->segment(3);
+		$id_kanwil = isset($_REQUEST['id_kanwil']) ? $_REQUEST['id_kanwil'] : $this->uri->segment(3);
 		
 		$query = "SELECT * FROM trans_schedule 
 					LEFT JOIN trans_schedule_team ON(trans_schedule_team.id_detail=trans_schedule.id)
@@ -362,7 +365,7 @@ class Select2 extends MY_Controller {
 					LEFT JOIN master_atm ON(master_atm.tid=trans_schedule_team.tid)
 					WHERE 
 						master_staff_petugas.nama LIKE '%$search%'
-						AND master_atm.kanwil = '$kanwil'
+						AND trans_schedule.id_lokasi = '$id_kanwil'
 					GROUP BY trans_schedule_team.pic
 		";
 		$result = $this->db->query($query)->result();
@@ -385,7 +388,7 @@ class Select2 extends MY_Controller {
 	
 	public function select_petugas_by_kanwil_switch() {
 		$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
-		$kanwil = isset($_REQUEST['kanwil']) ? $_REQUEST['kanwil'] : $this->uri->segment(3);
+		$id_kanwil = isset($_REQUEST['id_kanwil']) ? $_REQUEST['id_kanwil'] : $this->uri->segment(3);
 		$from = isset($_REQUEST['from']) ? $_REQUEST['from'] : $this->uri->segment(3);
 		
 		$query = "SELECT * FROM trans_schedule 
@@ -395,7 +398,7 @@ class Select2 extends MY_Controller {
 					WHERE 
 						master_staff_petugas.nik!='$from' AND
 						master_staff_petugas.nama LIKE '%$search%'
-						AND master_atm.kanwil = '$kanwil'
+						AND trans_schedule.id_lokasi = '$id_kanwil'
 					GROUP BY trans_schedule_team.pic
 		";
 		$result = $this->db->query($query)->result();
@@ -414,6 +417,23 @@ class Select2 extends MY_Controller {
 		} else {
 			echo json_encode($list);
 		}
+	}
+	
+	public function get_petugas_by_kanwil_switch($id) {
+		$query = "
+			SELECT *, master_staff_petugas.nama as nama_petugas FROM trans_clean_detail 
+			LEFT JOIN trans_clean ON(trans_clean.id=trans_clean_detail.id_detail)
+			LEFT JOIN master_kelolaan_detail ON(master_kelolaan_detail.id=trans_clean_detail.id_kelolaan_detail)
+			LEFT JOIN master_kelolaan ON(master_kelolaan_detail.id_kelolaan=master_kelolaan.id)
+			LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid)
+			LEFT JOIN trans_schedule_team ON(master_kelolaan_detail.tid=trans_schedule_team.tid)
+			LEFT JOIN master_staff_petugas ON(master_staff_petugas.nik=trans_schedule_team.pic)
+			WHERE trans_clean_detail.jenis_job='request_switch' AND trans_clean_detail.id='$id'
+		";
+		
+		$result = $this->db->query($query)->row();
+		
+		echo json_encode($result);
 	}
 	
 	public function select_team() {
