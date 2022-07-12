@@ -1,4 +1,4 @@
-@section('javascript')
+<?php $__env->startSection('javascript'); ?>
 	<script type="text/javascript">
 		pageSetUp();
 		
@@ -1400,4 +1400,4 @@
 			});
 		});
 	</script>
-@endsection
+<?php $__env->stopSection(); ?><?php /**PATH D:\APLIKASI\laragon-portable\www\prmesis\coresys\views/pages/dash_performance/script.blade.php ENDPATH**/ ?>

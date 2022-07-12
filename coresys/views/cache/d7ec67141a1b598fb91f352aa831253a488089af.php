@@ -311,6 +311,12 @@
 								}
 							});
 							$select_tid.val(null).trigger('change');
+						});
+						
+						$select_tid.on('select2:select', function (e) {
+							var data = e.params.data;
+							var tid = data.text;
+							var kelolaan_detail = data.id;
 							
 							$select_pic.select2({
 								tokenSeparators: [','],
@@ -323,7 +329,7 @@
 									data: function(params) {
 										return {
 											search: params.term,
-											kanwil: id_lokasi,
+											kelolaan_detail: kelolaan_detail
 										}
 									},
 									processResults: function (data, page) {
@@ -333,12 +339,7 @@
 									}
 								}
 							});
-							$select_pic.val(null).trigger('change');
-							
-						});
-						
-						$select_tid.on('select2:select', function (e) {
-							$select_pic.val(null).trigger('change');
+							// $select_pic.val(null).trigger('change');
 						});
 						
 					});

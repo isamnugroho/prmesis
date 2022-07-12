@@ -751,7 +751,7 @@
 								placeholder: "Select Petugas",
 								ajax: {
 									dataType: 'json',
-									url: '<?php echo base_url().'/select2/select_petugas_by_kanwil'?>',
+									url: '<?php echo base_url().'/select2/select_petugas_by_kanwil2'?>',
 									delay: 250,
 									type: "GET",
 									data: function(params) {

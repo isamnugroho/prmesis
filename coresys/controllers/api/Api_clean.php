@@ -43,8 +43,8 @@ class Api_clean extends REST_Controller {
 	public function sync_complaint_post() {
 		$this->init_model->init();
 		
-		print_r($_REQUEST['data']['sync']);
-		print_r($_REQUEST['data']['id_lokasi']);
+		// print_r($_REQUEST['data']['sync']);
+		// print_r($_REQUEST['data']['id_lokasi']);
 		if(isset($_REQUEST['data']['sync'])) {
 			$sync = $_REQUEST['data']['sync'];
 			$id_lokasi = $_REQUEST['data']['id_lokasi'];
@@ -215,6 +215,7 @@ class Api_clean extends REST_Controller {
 		// print_r($authorized->data);
 		$is_koord = $authorized->data->is_koord;
 		$id_lokasi = $_REQUEST['data']['id_lokasi'];
+		$pic = $_REQUEST['data']['pic'];
 		if($authorized) {
 			$sql = "
 				SELECT *, master_staff.nik as koord FROM trans_schedule
@@ -304,7 +305,9 @@ class Api_clean extends REST_Controller {
 							LEFT JOIN master_kelolaan ON(master_kelolaan_detail.id_kelolaan=master_kelolaan.id) 
 							LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid) 
 							LEFT JOIN master_staff_petugas ON(master_staff_petugas.nik=trans_complaint.pic) 
-							WHERE trans_complaint.date='".date("Y-m-d")."' AND trans_complaint.id_lokasi = '$id_lokasi'
+							WHERE trans_complaint.date='".date("Y-m-d")."' 
+							AND trans_complaint.id_lokasi = '$id_lokasi'
+							AND trans_complaint.pic = '$pic'
 						";
 						
 						$result_complaint = $this->db->query($sql2)->result_array();

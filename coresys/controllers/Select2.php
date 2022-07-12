@@ -198,7 +198,42 @@ class Select2 extends MY_Controller {
 		} else {
 			echo json_encode($list);
 		}
-    }
+	}
+	
+	
+	
+	function select_atm_by_ga2() {
+		$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
+		$ga = isset($_REQUEST['ga']) ? $_REQUEST['ga'] : '';
+		
+		$query = "SELECT *, master_kelolaan_detail.id as id_kelolaan_detail FROM master_kelolaan_detail 
+					LEFT JOIN master_kelolaan ON(master_kelolaan.id=master_kelolaan_detail.id_kelolaan)
+					LEFT JOIN master_atm ON(master_atm.tid=master_kelolaan_detail.tid)
+					WHERE master_kelolaan.grup_area='$ga' 
+					AND master_atm.tid IN (SELECT tid FROM trans_schedule_team)
+					AND (master_atm.alamat LIKE '%$search%' OR master_atm.tid LIKE '%$search%')";
+		$result = $this->db->query($query)->result();
+		
+		$bank = function($id) {
+			$nama = $this->db->query("SELECT nama FROM master_client WHERE id='$id'")->row()->nama;
+			return $nama;
+		};
+		
+		$list = array();
+		if (count($result) > 0) {
+			$key=0;
+			foreach ($result as $row) {
+				if($row->id!=="") {
+					$list[$key]['id'] = $row->tid;
+					$list[$key]['text'] = "(".$row->tid.") ".trim($row->alamat); 
+					$key++;
+				}
+			}
+			echo json_encode($list);
+		} else {
+			echo json_encode($list);
+		}
+	}
 	
 	public function select_timezone() {
 		$search = isset($_POST['search']) ? $_POST['search'] : '';
@@ -354,8 +389,41 @@ class Select2 extends MY_Controller {
 		}
 	}
 	
-	// USED BY trans_switch
+	// USED BY trans_complaint
 	public function select_petugas_by_kanwil() {
+		$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
+		$kelolaan_detail = isset($_REQUEST['kelolaan_detail']) ? $_REQUEST['kelolaan_detail'] : $this->uri->segment(3);
+		
+		$query = "SELECT * FROM trans_schedule 
+					LEFT JOIN trans_schedule_team ON(trans_schedule_team.id_detail=trans_schedule.id)
+					LEFT JOIN master_staff_petugas ON(master_staff_petugas.nik=trans_schedule_team.pic)
+					LEFT JOIN master_atm ON(master_atm.tid=trans_schedule_team.tid)
+					LEFT JOIN master_kelolaan_detail ON(master_kelolaan_detail.tid=trans_schedule_team.tid)
+					WHERE 
+						master_staff_petugas.nama LIKE '%$search%'
+						AND master_kelolaan_detail.id = '$kelolaan_detail'
+					GROUP BY trans_schedule_team.pic
+		";
+		$result = $this->db->query($query)->result();
+		
+		$list = array();
+		if (count($result) > 0) {
+			$key=0;
+			foreach ($result as $row) {
+				if($row->id!=="") {
+					$list[$key]['id'] = $row->nik;
+					$list[$key]['text'] = "(".$row->nik.") ".$row->nama; 
+					$key++;
+				}
+			}
+			echo json_encode($list);
+		} else {
+			echo json_encode($list);
+		}
+	}
+	
+	// USED BY trans_switch
+	public function select_petugas_by_kanwil2() {
 		$search = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
 		$id_kanwil = isset($_REQUEST['id_kanwil']) ? $_REQUEST['id_kanwil'] : $this->uri->segment(3);
 		

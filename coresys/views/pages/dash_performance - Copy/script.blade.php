@@ -1,12 +1,9 @@
 @section('javascript')
-	<script src="<?=BASE_LAYOUT?>datepicker/js/moment.js"></script>
-	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="<?=BASE_LAYOUT?>datepicker/js/bootstrap-daterangepicker.js"></script>
 	<script type="text/javascript">
 		pageSetUp();
 		
 		var table;
-		var base_url = "<?php echo base_url();?>/trans_complaint/";
+		var base_url = "<?php echo base_url();?>/master_user/";
 		var pagefunction = function() {
 			var responsiveHelper_dt_basic = undefined;
 			var responsiveHelper_datatable_fixed_column = undefined;
@@ -63,27 +60,35 @@
 				},
 				"pageLength" : 10,
 				"serverSide": true,
-				"ajax": base_url + 'json_ssp',
+				"ajax":{
+					url :  base_url + 'json',
+					type : 'POST',
+					dataFilter: function(data) {
+						console.log(data);
+						var json = jQuery.parseJSON( data );
+						json.recordsTotal = json.recordsTotal;
+						json.recordsFiltered = json.recordsFiltered;
+						json.data = json.data;
+
+						return JSON.stringify( json );
+					}
+				},
 				"order": [[1, "asc"]],
-				"columnDefs": [
-					{"render": function ( data, type, row ) {
-						if(data!=="") {
-							// return '<a href="'+base_url+"get_report/?objectName="+data+'" target="__blank"><button onclick="">Download Report Pagi</button></a>';
-							
-							return "<a onclick='deleteAction(\"<?=base_url()?>trans_complaint/delete/"+data+"\")' class='btn btn-danger btn-sm zoomsmall' style='background: linear-gradient(to top, #ed213a, #93291e);border-radius: 4px;font-weight:bold;'><img style='float: left; margin: 1px 5px 0px 0px; height:18px; width:18px; ' src='<?=BASE_LAYOUT?>/img/del.png'/>Delete</a>";
-						} else {
-							return "No report available";
-						}
-					}, "targets": [6]}
+				"columns": [
+					{
+						"class":          "details-control",
+						"orderable":      false,
+						"data":           null,
+						"defaultContent": ""
+					},
+					// { "searchable": false, "orderable": false, "data": "no" },
+					{ "searchable": true, "orderable": true,  "data": "nama_vendor" },
+					{ "searchable": true, "orderable": false, "data": "nik" },
+					{ "searchable": true, "orderable": false, "data": "nama" },
+					{ "searchable": true, "orderable": false, "data": "level" },
+					{ "searchable": true, "orderable": false, "data": "action" },
 				],
 			});
-			
-			function createManageBtn() {
-				return '<button id="manageBtn" type="button" onclick="myFunc()" class="btn btn-success btn-xs">Manage</button>';
-			}
-			function myFunc() {
-				console.log("Button was clicked!!!");
-			}
 			
 			var detailRows = [];
  
@@ -115,51 +120,6 @@
 			});
 		};
 		
-		function openPreview(objectName) {
-			var content = $('.content_form_preview').clone().html();
-			
-			$.confirm({
-				draggable: false,
-				title: false,
-				theme: 'light',
-				content: content,
-				columnClass: 'col-md-12',
-				buttons: {
-					close: function () {
-						//close
-					},
-				},
-				onContentReady: function () {
-					// bind to events
-					var jc = this;
-					
-					// $.ajax({
-						// url: base_url + 'get_reportx',
-						// dataType: 'html',
-						// method: 'get',
-						// data: {
-							// objectName: objectName
-						// },
-						// timeout: 3000,
-					// }).done(function (response) {
-						// console.log(response);
-					// }).fail(function(){
-					// });
-					// jc.showLoading();
-					
-					var a = $.confirm({
-						lazyOpen: true,
-					});
-					a.open();
-					a.showLoading();
-					jc.$content.find("#iframe").attr('src', base_url + 'get_reportx?objectName='+objectName)
-					jc.$content.find("#iframe").on("load", function() {
-						a.close();
-					});
-				}
-			});
-		}
-		
 		function createModal() {
 			var content = $('.content_form').clone().html();
 			
@@ -168,8 +128,7 @@
 				title: false,
 				theme: 'light',
 				content: content,
-				columnClass: 'col-sm-6 col-md-offset-3',
-				useBootstrap: true,
+				columnClass: 'col-md-4 col-md-offset-4',
 				buttons: {
 					formSubmit: {
 						text: 'Submit',
@@ -180,6 +139,7 @@
 							var url = self.$content.find('form')[0].action;
 							var form = self.$content.find('form')[0];
 							var formData = new FormData(form);
+							
 							self.showLoading();
 							
 							$.ajax({
@@ -225,17 +185,13 @@
 				onContentReady: function () {
 					// bind to events
 					var jc = this;
-					var $select_kanwil = this.$content.find('#kanwil')
-					var $select_ga = this.$content.find('#ga')
-					var $select_tid = this.$content.find('#tid')
-					var $select_pic = this.$content.find('#pic_to')
-					
-					$select_kanwil.select2({
+					var $select1 = this.$content.find('#staff')
+					$select1.select2({
 						tokenSeparators: [','],
-						placeholder: "Select KANWIL",
+						placeholder: "Select Staff",
 						ajax: {
 							dataType: 'json',
-							url: '<?php echo base_url().'/select2/select_kanwil'?>',
+							url: '<?php echo base_url().'/select2/select_staff'?>',
 							delay: 250,
 							type: "POST",
 							data: function(params) {
@@ -250,100 +206,24 @@
 							}
 						}
 					});
-					
-					$select_kanwil.on('select2:select', function (e) {
-						var data = e.params.data;
-						var kanwil = data.text;
-						
-						
-						jc.$content.find('#view_switch').hide();
-						
-						$select_ga.select2({
-							tokenSeparators: [','],
-							placeholder: "Select GRUP AREA",
-							ajax: {
-								dataType: 'json',
-								url: '<?php echo base_url().'/select2/select_ga'?>',
-								delay: 250,
-								type: "GET",
-								data: function(params) {
-									return {
-										search: params.term,
-										kanwil: kanwil,
-									}
-								},
-								processResults: function (data, page) {
-									return {
-										results: data
-									};
-								}
-							}
-						});
-						$select_ga.val(null).trigger('change');
-						
-						$select_ga.on('select2:select', function (e) {
-							jc.$content.find('#view_switch').show();
-							var data = e.params.data;
-							var ga = data.text;
-							var id_lokasi = data.id;
-							
-							// alert(data.text+" "+data.id);
-							
-							$select_tid.select2({
-								tokenSeparators: [','],
-								placeholder: "Select TID",
-								ajax: {
-									dataType: 'json',
-									url: '<?php echo base_url().'/select2/select_atm_by_ga'?>',
-									delay: 250,
-									type: "GET",
-									data: function(params) {
-										return {
-											search: params.term,
-											ga: ga,
-										}
-									},
-									processResults: function (data, page) {
-										return {
-											results: data
-										};
-									}
-								}
-							});
-							$select_tid.val(null).trigger('change');
-						});
-						
-						$select_tid.on('select2:select', function (e) {
-							var data = e.params.data;
-							var tid = data.text;
-							var kelolaan_detail = data.id;
-							
-							$select_pic.select2({
-								tokenSeparators: [','],
-								placeholder: "Select PETUGAS",
-								ajax: {
-									dataType: 'json',
-									url: '<?php echo base_url().'/select2/select_petugas_by_kanwil'?>',
-									delay: 250,
-									type: "GET",
-									data: function(params) {
-										return {
-											search: params.term,
-											kelolaan_detail: kelolaan_detail
-										}
-									},
-									processResults: function (data, page) {
-										return {
-											results: data
-										};
-									}
-								}
-							});
-							// $select_pic.val(null).trigger('change');
-						});
-						
+					var data = [
+						{id: 'SUPER',text: 'SUPER ADMIN'},
+						{id: 'ADMIN',text: 'ADMIN'},
+						{id: 'KOORDINATOR',text: 'KOORDINATOR'},
+						{id: 'PETUGAS',text: 'PETUGAS'}
+					];
+					var $select3 = this.$content.find('#level');
+					$select3.select2({
+						placeholder: "Select Level User",
+						data: data
 					});
 					
+					this.$content.find('.name').focus();
+					this.$content.find('form').on('submit', function (e) {
+						// if the user submits the form by pressing enter in the field.
+						e.preventDefault();
+						jc.$$formSubmit.trigger('click'); // reference the button and click it
+					});
 				}
 			});
 		}
