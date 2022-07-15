@@ -100,7 +100,7 @@ class Api_clean extends REST_Controller {
 							'withness_sore'=> $s['withness_sore'],
 							'remark_pagi'=> (isset($s['remark_pagi']) ? $s['remark_pagi'] : ""),
 							'remark_sore'=> (isset($s['remark_sore']) ? $s['remark_sore'] : ""),
-							'jenis_job'=> $s['jenis_job'],
+							'jenis_job'=> (isset($s['jenis_job']) ? $s['jenis_job'] : "")
 						))) {
 							echo "failed";
 						}
@@ -187,7 +187,7 @@ class Api_clean extends REST_Controller {
 								'withness_sore'=> $s['withness_sore'],
 								'remark_pagi'=> (isset($s['remark_pagi']) ? $s['remark_pagi'] : ""),
 								'remark_sore'=> (isset($s['remark_sore']) ? $s['remark_sore'] : ""),
-								'jenis_job'=> $s['jenis_job'],
+								'jenis_job'=> (isset($s['jenis_job']) ? $s['jenis_job'] : "")
 							))) {
 								echo "failed";
 							}
@@ -433,7 +433,7 @@ class Api_clean extends REST_Controller {
 								'withness_sore'=> $s['withness_sore'],
 								'remark_pagi'=> (isset($s['remark_pagi']) ? $s['remark_pagi'] : ""),
 								'remark_sore'=> (isset($s['remark_sore']) ? $s['remark_sore'] : ""),
-								'jenis_job'=> $s['jenis_job'],
+								'jenis_job'=> (isset($s['jenis_job']) ? $s['jenis_job'] : "")
 							))) {
 								echo "failed";
 							}
