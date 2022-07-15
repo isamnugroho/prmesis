@@ -135,16 +135,29 @@ class Trans_schedule extends MY_Controller {
         $data = array();
 		$object = json_decode(json_encode($r['data']), FALSE);
 		
-		$proj = function($nik) {
+		$proj = function($nik, $lokasi) {
 			if($nik!=="") {
 				// $array = $staff->whereIn('nik', json_decode($team))->find();
-				$array = $this->db->query("SELECT *, master_staff_petugas.nik as nik, master_staff_petugas.nama as nama_staff FROM master_staff_petugas LEFT JOIN master_staff ON(master_staff.id=master_staff_petugas.id_koord) WHERE master_staff.nik='$nik'")->result_array();
+				// $array = $this->db->query("
+					// // SELECT *, master_staff_petugas.nik as nik, master_staff_petugas.nama as nama_staff 
+					// // FROM master_staff_petugas 
+					// // LEFT JOIN master_staff ON(master_staff.id=master_staff_petugas.id_koord) 
+					// // WHERE master_staff.nik='$nik'")->result_array();
+					
+				$array = $this->db->query("
+						SELECT *, master_staff_petugas.nik as nik, master_staff_petugas.nama as nama_staff 
+						FROM master_staff_petugas
+						LEFT JOIN master_staff ON(master_staff.id=master_staff_petugas.id_koord) 
+						WHERE master_staff.nik='$nik' AND master_staff_petugas.id_lokasi='$lokasi'
+					")->result_array();
 				$output = array();
 				foreach ($array as $subarray) { $output[] = "Username : ".$subarray['nik']."<br> Nama : ".$subarray['nama_staff']; }
 				// return implode(", ", $output);
 				// return implode("<br>", $output);
 				// return '<ul style="list-style-type:disc; margin-left: 10px"><li style="display: list-item;">' . implode( '</li><li>', $output) . '</li></ol>';
-				return '<ul style="list-style-type:list; margin-left: 10px"><li style="display: list-item;">' . implode( '</li><li>', $output) . '</li></ol>';
+				if(count($array)>0) {
+					return '<ul style="list-style-type:list; margin-left: 10px"><li style="display: list-item;">' . implode( '</li><li>', $output) . '</li></ol>';
+				}
 			}
 			
 			return null;
@@ -163,7 +176,7 @@ class Trans_schedule extends MY_Controller {
 			$list[$key]['kanwil'] = $rows->kanwil;
 			$list[$key]['grup_area'] = $rows->grup_area;
 			$list[$key]['pic'] = "Username : ".$rows->pic."<br>"."Nama : ".$rows->nama_staff;
-			$list[$key]['team'] = $proj($rows->pic);
+			$list[$key]['team'] = $proj($rows->pic, $rows->id_lokasi);
 			$list[$key]['action'] = "
 				<center>
 				<a onclick='createModalAssignedTeam(".json_encode($rows).")' class='btn btn-success btn-sm zoomsmall' style='background: linear-gradient(to bottom, #69c167, #13aa1d);border-radius: 4px;font-weight:bold;'><img style='float: left; margin: 1px 5px 0px 0px; height:15px; width:15px; ' src='".BASE_LAYOUT."/img/adddata.png'/>Assign Team Job</a></center>";
