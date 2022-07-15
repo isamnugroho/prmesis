@@ -1,7 +1,7 @@
-@extends('layouts.master_layout')
 
-@section('content')
-	@include('pages_koord/dash_performance/style')
+
+<?php $__env->startSection('content'); ?>
+	<?php echo $__env->make('pages_koord/dash_performance/style', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 	<section id="widget-grid" class="">
 		<div class="row">
 			<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0px 0px 0px 0px;">
@@ -132,8 +132,7 @@
 				<div class="widget-body no-padding" style="background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);">
 					<br>
 					<center>
-						<form action="<?=base_url().explode("/", $that->uri->uri_string())[0].'/insert_petugas'?>" style="width: 95%; 
-text-align: left;">
+						<form action="<?=base_url().explode("/", $that->uri->uri_string())[0].'/insert_petugas'?>" style="width: 95%; text-align: left;">
 							<input type="hidden" placeholder="" class="form-control" id="id_lokasi" name="id_lokasi" value="<?=$id?>">
 							<div class="row">
 								<div class="col-md-12" style="width: 100%">
@@ -303,6 +302,8 @@ text-align: left;">
 			</div>
 		</div>
 	</article>	
-@endsection
-@include('pages_koord/dash_performance/script')
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('pages_koord/dash_performance/script', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+
+<?php echo $__env->make('layouts.master_layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\APLIKASI\laragon-portable\www\prmesis\coresys\views/pages_koord/dash_performance/index.blade.php ENDPATH**/ ?>

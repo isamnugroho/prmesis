@@ -33,7 +33,8 @@ class Service extends REST_Controller {
 	public function tes_post() {
 		$database = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			// 'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		print_r($_REQUEST);
@@ -251,7 +252,8 @@ class Service extends REST_Controller {
 	public function upload_pending_post() {
 		$database = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			// 'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		print_r($_REQUEST);
@@ -405,7 +407,8 @@ class Service extends REST_Controller {
 	public function upload_closed_post() {
 		$database = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			// 'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		print_r($_REQUEST);

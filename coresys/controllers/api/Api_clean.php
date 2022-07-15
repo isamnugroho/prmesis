@@ -98,8 +98,8 @@ class Api_clean extends REST_Controller {
 							'ttd_pic_sore'=> $s['ttd_pic_sore'],
 							'withness_pagi'=> $s['withness_pagi'],
 							'withness_sore'=> $s['withness_sore'],
-							'remark_pagi'=> $s['remark_pagi'],
-							'remark_sore'=> $s['remark_sore'],
+							'remark_pagi'=> (isset($s['remark_pagi']) ? $s['remark_pagi'] : ""),
+							'remark_sore'=> (isset($s['remark_sore']) ? $s['remark_sore'] : ""),
 							'jenis_job'=> $s['jenis_job'],
 						))) {
 							echo "failed";

@@ -127,7 +127,7 @@ class Dash_performance extends MY_Controller {
 		$param['order'] 		= array('master_staff.id' => 'desc');
 		// $param['where'] 		= array(array('merk_mesin' => 'DN Series 200V FL'), array('kanwil' => 'DENPASAR'));
 		if($id_vendor!=="") {
-			$param['where'] 		= array(array('master_staff.id_vendor[!]'=>'0'), array('master_staff.id_vendor'=>$id_vendor));
+			$param['where'] 		= array(array('master_staff.id_vendor[!]'=>'0'), array('master_staff.id'=>$id_vendor));
 		} else {
 			$param['where'] 		= array(array('master_staff.id_vendor[!]'=>'0'));
 		}

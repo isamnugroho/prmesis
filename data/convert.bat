@@ -1,1 +1,0 @@
-java -jar client-0.0.5.jar convert --output-format=sqlite insan_cleaning.sql data_report/

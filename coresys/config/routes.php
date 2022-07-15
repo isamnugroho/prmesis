@@ -81,3 +81,7 @@ $route['api/sync_complaint'] = function () {
 $route['api/init'] = function () {
 	return 'api/api_clean/init';
 };
+
+$route['api/json'] = function () {
+	return 'api/api_json/json';
+};
