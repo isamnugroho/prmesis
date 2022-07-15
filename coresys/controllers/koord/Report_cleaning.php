@@ -106,7 +106,7 @@ class Report_cleaning extends MY_Controller {
 		$sqlite = function($id_detail, $job_type) {
 			$database = new Medoo([
 				'type' => 'sqlite',
-				'database' => 'data/data_report/data.sqlite'
+				'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 			]);
 			
 			if($job_type=="PAGI") {
@@ -140,7 +140,7 @@ class Report_cleaning extends MY_Controller {
 				if($d!=="") {
 					$database = new Medoo([
 						'type' => 'sqlite',
-						'database' => 'data/data_report/data.sqlite'
+						'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 					]);
 					$id_detail = $row[0];
 					$daily_report = $database->get("daily_report", "daily_report_pagi", [
@@ -158,7 +158,7 @@ class Report_cleaning extends MY_Controller {
 				if($d!=="") {
 					$database = new Medoo([
 						'type' => 'sqlite',
-						'database' => 'data/data_report/data.sqlite'
+						'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 					]);
 					$id_detail = $row[0];
 					$daily_report = $database->get("daily_report", "daily_report_sore", [
@@ -257,7 +257,7 @@ class Report_cleaning extends MY_Controller {
 		$sqlite = function($id_detail, $job_type) {
 			$database = new Medoo([
 				'type' => 'sqlite',
-				'database' => 'data/data_report/data.sqlite'
+				'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 			]);
 			
 			if($job_type=="PAGI") {
@@ -291,7 +291,7 @@ class Report_cleaning extends MY_Controller {
 				if($d!=="") {
 					$database = new Medoo([
 						'type' => 'sqlite',
-						'database' => 'data/data_report/data.sqlite'
+						'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 					]);
 					$id_detail = $row[0];
 					$daily_report = $database->get("daily_report", "daily_report_pagi", [
@@ -309,7 +309,7 @@ class Report_cleaning extends MY_Controller {
 				if($d!=="") {
 					$database = new Medoo([
 						'type' => 'sqlite',
-						'database' => 'data/data_report/data.sqlite'
+						'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 					]);
 					$id_detail = $row[0];
 					$daily_report = $database->get("daily_report", "daily_report_sore", [
@@ -381,7 +381,7 @@ class Report_cleaning extends MY_Controller {
 	public function medoo_json() {
 		$db = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		// echo "<pre>";
@@ -503,7 +503,7 @@ class Report_cleaning extends MY_Controller {
 	public function get_rep() {
 		$database = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		$objectName = $_REQUEST['objectName'];
@@ -542,7 +542,7 @@ class Report_cleaning extends MY_Controller {
 	public function get_rep2() {
 		$database = new Medoo([
 			'type' => 'sqlite',
-			'database' => 'data/data_report/data.sqlite'
+			'database' => '../prmesis_filemanager/data/data_report/data.sqlite'
 		]);
 		
 		$objectName = $_REQUEST['objectName'];
